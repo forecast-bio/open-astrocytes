@@ -1,21 +1,24 @@
 project:
   type: website
+  output-dir: ../public
 
 website:
-  title: "src"
-  navbar:
-    left:
-      - href: index.qmd
-        text: Home
-      - about.qmd
+  title: "Forecast Research"
+  navbar: {}
+    # right:
+    #   - href: index.qmd
+    #     text: Home
+    #   - about.qmd
 
 format:
   html:
     theme:
-      - cosmo
+      - pandoc
       - brand
+      - theme-light.scss
     css: styles.css
     toc: true
+    toc-title: "OpenAstrocytes"
 
 
-
+#
