@@ -4,7 +4,10 @@ project:
 
 website:
   title: "Forecast Research"
-  navbar: {}
+  navbar:
+    title: "Research"
+    logo: /img/wordmark.svg
+    
     # right:
     #   - href: index.qmd
     #     text: Home
@@ -18,7 +21,26 @@ format:
       - theme-light.scss
     css: styles.css
     toc: true
+    toc-location: left
     toc-title: "OpenAstrocytes"
+    include-in-header:
+    - text: |
+        <style>
+        .navbar-logo {
+          max-height: unset;
+          height: 18px;
+          margin-top: -1px;
+        }
+        .navbar-brand {
+          margin-top: 6px;
+        }
+        .navbar-title {
+          color: #F95838;
+          font-size: 18pt;
+          font-family: 'Times New Roman';
+          font-style: italic
+        }
+        </style>
 
 
 #

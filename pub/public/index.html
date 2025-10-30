@@ -6,11 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Maxine Levesque">
-<meta name="author" content="Kira Poskanzer">
-<meta name="dcterms.date" content="2025-10-31">
 
-<title>OpenAstrocytes – Forecast Research</title>
+<title>Forecast Research</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,41 +20,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -68,6 +30,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-listing/list.min.js"></script>
+<script src="site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -105,20 +69,97 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script>
 
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-listing .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-image','listing-date','listing-title','listing-subtitle','listing-author',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] }],
+      
+      searchColumns: ["listing-title","listing-link","listing-subtitle","listing-date","listing-author"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  </script>
+<style>
+.navbar-logo {
+  max-height: unset;
+  height: 18px;
+  margin-top: -1px;
+}
+.navbar-brand {
+  margin-top: 6px;
+}
+.navbar-title {
+  color: #F95838;
+  font-size: 18pt;
+  font-family: 'Times New Roman';
+  font-style: italic
+}
+</style>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="floating nav-fixed fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+  <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    <img src="./img/wordmark.svg" alt="" class="navbar-logo">
+    </a>
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">Forecast Research</span>
+    <span class="navbar-title">Research</span>
     </a>
   </div>
         <div class="quarto-navbar-tools tools-end">
@@ -128,149 +169,58 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
-  <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-body">
-      <h1 class="title">OpenAstrocytes</h1>
-            <p class="subtitle lead">AI-ready dynamic activity from the astrocyte network</p>
-                      </div>
-  </div>
-    
-  
-  <div class="quarto-title-meta">
-
-      <div>
-      <div class="quarto-title-meta-heading">Authors</div>
-      <div class="quarto-title-meta-contents">
-               <p>Maxine Levesque <a href="mailto:maxine@forecast.bio" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
-               <p>Kira Poskanzer </p>
-            </div>
-    </div>
-      
-      <div>
-      <div class="quarto-title-meta-heading">Published</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date">October 31, 2025</p>
-      </div>
-    </div>
-    
-      
-    </div>
-    
-  
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-<!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">OpenAstrocytes</h2>
-   
-  <ul>
-  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">TL;DR</a></li>
-  <li><a href="#background" id="toc-background" class="nav-link" data-scroll-target="#background">Background</a>
-  <ul class="collapse">
-  <li><a href="#astrocyte-calcium-dynamics" id="toc-astrocyte-calcium-dynamics" class="nav-link" data-scroll-target="#astrocyte-calcium-dynamics">Astrocyte calcium dynamics</a></li>
-  </ul></li>
-  <li><a href="#architecture" id="toc-architecture" class="nav-link" data-scroll-target="#architecture">Architecture</a>
-  <ul class="collapse">
-  <li><a href="#backbone-distributed-typed-webdatasets-with-atdata" id="toc-backbone-distributed-typed-webdatasets-with-atdata" class="nav-link" data-scroll-target="#backbone-distributed-typed-webdatasets-with-atdata">Backbone: Distributed, typed WebDatasets with <code>atdata</code></a></li>
-  <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data">The data</a></li>
-  </ul></li>
-  <li><a href="#demo" id="toc-demo" class="nav-link" data-scroll-target="#demo">Demo</a>
-  <ul class="collapse">
-  <li><a href="#fine-tuning-an-image-model-on-openastrocytes" id="toc-fine-tuning-an-image-model-on-openastrocytes" class="nav-link" data-scroll-target="#fine-tuning-an-image-model-on-openastrocytes">Fine-tuning an image model on OpenAstrocytes</a></li>
-  </ul></li>
-  <li><a href="#looking-ahead" id="toc-looking-ahead" class="nav-link" data-scroll-target="#looking-ahead">Looking ahead</a></li>
-  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
-  </ul>
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    
 </nav>
-    </div>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    
 <!-- main -->
-<main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
 
 
+<section id="our-latest" class="level2">
+<h2 class="anchored" data-anchor-id="our-latest">Our latest</h2>
+<p>&nbsp;</p>
 
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">TL;DR</h2>
-<p>…</p>
-</section>
-<section id="background" class="level2">
-<h2 class="anchored" data-anchor-id="background">Background</h2>
-<p>The human brain is about one-third neurons. But two-thirds of it isn’t; and, in recent years, the neuroscience field has become more acutely aware of the incredible importance of the roles played by those other sorts of cells.</p>
-<p>One of those other thirds is made up of <strong>astrocytes</strong>—. Astrocytes form a cellular network woven between the neurons, …</p>
-<section id="astrocyte-calcium-dynamics" class="level3">
-<h3 class="anchored" data-anchor-id="astrocyte-calcium-dynamics">Astrocyte calcium dynamics</h3>
-<p>One absolutely crucial</p>
-</section>
-</section>
-<section id="architecture" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="architecture">Architecture</h2>
-<p>… Overview …</p>
-<section id="backbone-distributed-typed-webdatasets-with-atdata" class="level3 page-columns page-full">
-<h3 class="anchored" data-anchor-id="backbone-distributed-typed-webdatasets-with-atdata">Backbone: Distributed, typed WebDatasets with <code>atdata</code></h3>
-<div class="page-columns page-full"><p>The OpenAstrocytes dataset is built on <a href="https://github.com/foundation-ac/atdata"><code>atdata</code></a>, an open-source package we’re developing at Forecast for distributed, interoperable usage of AI-ready datasets. <code>atdata</code> is built on the open <a href="https://github.com/webdataset/webdataset">WebDataset</a> format, designed for use as a high-performance AI I/O layer.</p><div class="no-row-height column-margin column-container"><span class="margin-aside">The original motivation for <code>atdata</code> internally was to have fast infrastructure for putting together our rich, multimodal datasets to speed up the iteration cycle for our R&amp;D;</span></div></div>
-<p><code>atdata</code> makes it straightforward to understand structured data from remote repositories:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> style <span class="im">import</span> HouseStyle</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> atdata</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> openastros.datasets.uncaging <span class="im">import</span> MovieFrame</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>dataset_url <span class="op">=</span> <span class="st">'https://research.forecast.bio/datasets/astrocyte_nts-{0000..0024}.tar'</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># `atdata` uses generigs to annotate sample types</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> atdata.Dataset[MovieFrame]( dataset_url )</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Under the hood, `atdata`take care of downloading, caching, buffering,</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># unpacking samples, etc.</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> batch <span class="kw">in</span> atdata.shuffled( batch_size <span class="op">=</span> <span class="dv">32</span> ):</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    labels <span class="op">=</span> np.array( batch.labels )</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    frames <span class="op">=</span> batch.data</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Just pull the first batch</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">break</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> HouseStyle() <span class="im">as</span> s:</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    plt.figure()</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    plt.imshow( frames[<span class="dv">0</span>] )</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><code>atdata</code>’s typing functionality already helps for keeping datasets sane; but, where keeping track of sample types really shines is when we register <em>mappings</em> between types:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> atdata.schemas <span class="im">import</span> LabeledImage</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="at">@atdata.projection</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> project( sample: MovieFrame ) <span class="op">-&gt;</span> LabeledImage:</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> LabeledImage(</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        image <span class="op">=</span> sample.data,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>        label <span class="op">=</span> sample.label</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="page-columns page-full"><p>This design enables us, as we’re building AI models from a bunch of different sources, to easily aggregate across our diverse hive of WebDatasets across modalities and experiments that are able to be compatibly merged. The full <code>atdata</code> ecosystem is architected to go one step further, placing metadata for type schemas of scientific datasets—and the code for these lenses between them—in a public, decentralized repository on <a href="https://atproto.com">ATProto</a>, the protocol layer underlying the <a href="https://bsky.social/about">Bluesky</a> social network. This allows AI coding agents on data science tasks to automatically leverage domain knowledge of structured semantic relationships to decide what data to pull from for a given task.</p><div class="no-row-height column-margin column-container"><span class="margin-aside">More on <code>atdata</code> soon—sign up for updates to hear first as we push more features to the public release!</span></div></div>
-</section>
-<section id="the-data" class="level3">
-<h3 class="anchored" data-anchor-id="the-data">The data</h3>
-<p>…</p>
-</section>
-</section>
-<section id="demo" class="level2">
-<h2 class="anchored" data-anchor-id="demo">Demo</h2>
-<p>…</p>
-<section id="fine-tuning-an-image-model-on-openastrocytes" class="level3">
-<h3 class="anchored" data-anchor-id="fine-tuning-an-image-model-on-openastrocytes">Fine-tuning an image model on OpenAstrocytes</h3>
-<p>…</p>
-</section>
-</section>
-<section id="looking-ahead" class="level2">
-<h2 class="anchored" data-anchor-id="looking-ahead">Looking ahead</h2>
-<p>…</p>
-</section>
-<section id="section" class="level1">
-<h1></h1>
 
 
 </section>
 
-</main> <!-- /main -->
+<div class="quarto-listing quarto-listing-container-custom" id="listing-listing">
+<div>
+<div class="thumbnail">
+<a href="./open-astrocytes/" class="no-external"></a>
+</div>
+<div class="list quarto-listing-default">
+<div class="quarto-post image-right">
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./open-astrocytes/" class="no-external">OpenAstrocytes</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./open-astrocytes/" class="no-external">AI-ready dynamic activity from the astrocyte network</a>
+</div>
+</div>
+</div>
+</div>
+<div class="metadata">
+<a href="http://noether.spangled-bass.ts.net/" class="no-external">
+<div class="listing-date">
+Oct 31, 2025
+</div>
+<div class="listing-author">
+Maxine Levesque, Kira Poskanzer
+</div>
+</a>
+</div>
+</div>
+<div class="listing-no-matching d-none">No matching items</div>
+</div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
