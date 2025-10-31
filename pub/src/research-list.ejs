@@ -1,5 +1,9 @@
-<div>
+<div class="list quarto-listing-default">
 <% for (const item of items) { %>
-  <div class="thumbnail"><a href="<%- item.link %>" class="no-external"></a></div><div class="list quarto-listing-default"><div class="quarto-post image-right"><div class="body"><h3 class="no-anchor listing-title"><a href="<%- item.link %>" class="no-external"><%= item.title %></a></h3><div class="listing-subtitle"><a href="<%- item.link %>" class="no-external"><%= item.subtitle %></a></div></div></div></div><div class="metadata"><a href="http://noether.spangled-bass.ts.net/" class="no-external"><div class="listing-date">Oct 31, 2025</div><div class="listing-author">Maxine Levesque, Kira Poskanzer</div></a></div>
+<div class="quarto-post image-right"><div class="thumbnail"><a href="<%- item.link %>"><!-- preview image tag here --></a></a></div><div class="body"><a href="<%- item.link %>"><h3 class="no-anchor listing-title"><%= item.title %></h3><div class="listing-subtitle"><%= item.subtitle %></div></a><div class="listing-categories">
+<% for (const category of item.categories) { %><div class="listing-category" onclick="window.quartoListingCategory('<%=category%>'); return false;"><%= category %></div>
+<% } %>
+</div><a href="<%- item.link %>"><div class="delink listing-description"><%= item.description %></div></a></div><div class="metadata"><a href="<%- item.link %>"><p><%- item.date %></p><p><%- item.author %></p></a></div></div>
+
 <% } %>
 </div>

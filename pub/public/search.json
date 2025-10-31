@@ -7,48 +7,6 @@
     "text": "About this site"
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Latest",
-    "section": "",
-    "text": "where does this go?\n\n\n\n\n\n\n\n\n\n\n\n\n\nOpenAstrocytes\n\n\nAI-ready dynamic activity from the astrocyte network\n\n\n\n\n\n\n\nOct 31, 2025\n\n\nMaxine Levesque, Kira Poskanzer\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "index.html#tldr",
-    "href": "index.html#tldr",
-    "title": "Forecast Research",
-    "section": "",
-    "text": "…"
-  },
-  {
-    "objectID": "index.html#background",
-    "href": "index.html#background",
-    "title": "Forecast Research",
-    "section": "Background",
-    "text": "Background\nThe human brain is about one-third neurons. But two-thirds of it isn’t; and, in recent years, the neuroscience field has become more acutely aware of the incredible importance of the roles played by those other sorts of cells.\nOne of those other thirds is made up of astrocytes—. Astrocytes form a cellular network woven between the neurons, …\n\nAstrocyte calcium dynamics\nOne absolutely crucial"
-  },
-  {
-    "objectID": "index.html#architecture",
-    "href": "index.html#architecture",
-    "title": "Forecast Research",
-    "section": "Architecture",
-    "text": "Architecture\n… Overview …\n\nBackbone: Distributed, typed WebDatasets with atdata\nThe OpenAstrocytes dataset is built on atdata, an open-source package we’re developing at Forecast for distributed, interoperable usage of AI-ready datasets. atdata is built on the open WebDataset format, designed for use as a high-performance AI I/O layer.The original motivation for atdata internally was to have fast infrastructure for putting together our rich, multimodal datasets to speed up the iteration cycle for our R&D;\natdata makes it straightforward to understand structured data from remote repositories:\nimport numpy as np\nimport matplotlib.pyplot as plt\nfrom style import HouseStyle\n\nimport atdata\nfrom openastros.datasets.uncaging import MovieFrame\n\ndataset_url = 'https://research.forecast.bio/datasets/astrocyte_nts-{0000..0024}.tar'\n\n# `atdata` uses generigs to annotate sample types\ndataset = atdata.Dataset[MovieFrame]( dataset_url )\n\n# Under the hood, `atdata`take care of downloading, caching, buffering,\n# unpacking samples, etc.\nfor batch in atdata.shuffled( batch_size = 32 ):\n    labels = np.array( batch.labels )\n    frames = batch.data\n    # Just pull the first batch\n    break\n\nwith HouseStyle() as s:\n    plt.figure()\n    plt.imshow( frames[0] )\n    plt.show()\natdata’s typing functionality already helps for keeping datasets sane; but, where keeping track of sample types really shines is when we register mappings between types:\nfrom atdata.schemas import LabeledImage\n\n@atdata.projection\ndef project( sample: MovieFrame ) -&gt; LabeledImage:\n    return LabeledImage(\n        image = sample.data,\n        label = sample.label\n    )\nThis design enables us, as we’re building AI models from a bunch of different sources, to easily aggregate across our diverse hive of WebDatasets across modalities and experiments that are able to be compatibly merged. The full atdata ecosystem is architected to go one step further, placing metadata for type schemas of scientific datasets—and the code for these lenses between them—in a public, decentralized repository on ATProto, the protocol layer underlying the Bluesky social network. This allows AI coding agents on data science tasks to automatically leverage domain knowledge of structured semantic relationships to decide what data to pull from for a given task.More on atdata soon—sign up for updates to hear first as we push more features to the public release!\n\n\nThe data\n…"
-  },
-  {
-    "objectID": "index.html#demo",
-    "href": "index.html#demo",
-    "title": "Forecast Research",
-    "section": "Demo",
-    "text": "Demo\n…\n\nPatch embeddings from off-the-shelf DINOv3\n…\n\n\nFine-tuning an image model on OpenAstrocytes\n…"
-  },
-  {
-    "objectID": "index.html#looking-ahead",
-    "href": "index.html#looking-ahead",
-    "title": "Forecast Research",
-    "section": "Looking ahead",
-    "text": "Looking ahead\n…\n\nBuilding on atdata\n…\n\n\nLoving neurons, too\n…\n\n\nA new kind of data\n…\n \n\n \n\n\nNotes\n\n\n\n\n\n\nAcknowledgements\n\n\n\n\n\nWe’d like to thank Dr. Michelle Cahill and Dr. Michael Reitman for\n\n\n\n\n\n\n\n\n\nAI usage\n\n\n\n\n\nNo language model tools were used to produce any of the code for or writing in this pub.\n\n\n\n\n\n\n\n\n\nCopyright notice\n\n\n\n\n\nCopyright © 2025 Forecast Bio, Inc.\nThe contents of this article are licensed under the Creative Commons CC-BY license."
-  },
-  {
     "objectID": "open-astrocytes/index.html",
     "href": "open-astrocytes/index.html",
     "title": "OpenAstrocytes",

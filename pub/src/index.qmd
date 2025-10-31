@@ -29,6 +29,7 @@
 
 title: ""
 toc: false
+sidebar: false
 listing:
     template: research-list.ejs
     fields: [image, date, title, subtitle, author]
@@ -38,9 +39,20 @@ listing:
           link: /open-astrocytes/
           subtitle: AI-ready dynamic activity from the astrocyte network
           date: 31 October 2025
+          categories:
+            - Pub
           author:
             - Maxine Levesque
             - Kira Poskanzer
+        
+        - title: A test post
+          link: about:blank
+          subtitle: This is a test
+          data: 28 September 2025
+          categories:
+            - Pub
+          author:
+            - A B
 ---
 
 ## Our latest

@@ -67,20 +67,39 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<style>
+.navbar-logo {
+  max-height: unset;
+  height: 18px;
+  margin-top: -1px;
+}
+.navbar-brand {
+  margin-top: 6px;
+}
+.navbar-title {
+  color: #F95838;
+  font-size: 18pt;
+  font-family: 'Times New Roman';
+  font-style: italic
+}
+</style>
 
 
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="floating nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    <img src="./img/wordmark.svg" alt="" class="navbar-logo">
+    </a>
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">Forecast Research</span>
+    <span class="navbar-title">Research</span>
     </a>
   </div>
         <div class="quarto-navbar-tools tools-end">
@@ -92,9 +111,12 @@ ul.task-list li input[type="checkbox"] {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
