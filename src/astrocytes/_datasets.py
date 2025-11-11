@@ -11,7 +11,7 @@ from enum import Enum
 import requests
 import yaml
 
-import openastros.schema as schema
+import astrocytes.schema as schema
 
 import atdata
 import toile.schema

@@ -225,8 +225,8 @@ class ImageEmbedder:
         import atdata
         import toile.schema as ts
 
-        import openastros
-        import openastros.schema as os
+        import astrocytes
+        import astrocytes.schema as os
 
         from numpy.typing import NDArray
         
@@ -523,7 +523,7 @@ class ImageEmbedder:
 
         import atdata
         import toile.schema as ts
-        import openastros.schema as os
+        import astrocytes.schema as os
 
         import webdataset as wds
 

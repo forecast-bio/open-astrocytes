@@ -1,5 +1,5 @@
 [project]
-name = "openastros"
+name = "astrocytes"
 version = "0.1.0"
 description = "TODO"
 readme = "README.md"
@@ -20,7 +20,7 @@ dependencies = [
 ]
 
 [project.scripts]
-openastros = "openastros:main"
+astrocytes = "astrocytes:main"
 
 [build-system]
 requires = ["hatchling"]

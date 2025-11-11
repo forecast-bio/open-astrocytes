@@ -220,6 +220,57 @@ wheels = [
 ]
 
 [[package]]
+name = "astrocytes"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "asyncstdlib" },
+    { name = "atdata" },
+    { name = "matplotlib" },
+    { name = "python-dotenv" },
+    { name = "scikit-image" },
+    { name = "scikit-learn" },
+    { name = "scipy" },
+    { name = "toile" },
+    { name = "umap-learn" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "allensdk" },
+    { name = "jupyter" },
+    { name = "modal" },
+    { name = "pytest" },
+    { name = "pytest-cov" },
+    { name = "torch" },
+    { name = "transformers" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "asyncstdlib", specifier = ">=3.13.1" },
+    { name = "atdata", specifier = ">=0.1.2b1" },
+    { name = "matplotlib", specifier = ">=3.10.7" },
+    { name = "python-dotenv", specifier = ">=1.2.1" },
+    { name = "scikit-image", specifier = ">=0.25.2" },
+    { name = "scikit-learn", specifier = ">=1.7.2" },
+    { name = "scipy", specifier = ">=1.16.3" },
+    { name = "toile", specifier = ">=0.1.1a2" },
+    { name = "umap-learn", specifier = ">=0.5.9.post2" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "allensdk", specifier = ">=0.16.3" },
+    { name = "jupyter", specifier = ">=1.1.1" },
+    { name = "modal", specifier = ">=1.2.1" },
+    { name = "pytest", specifier = ">=8.4.2" },
+    { name = "pytest-cov", specifier = ">=7.0.0" },
+    { name = "torch", specifier = ">=2.9.0" },
+    { name = "transformers", specifier = ">=4.57.1" },
+]
+
+[[package]]
 name = "asttokens"
 version = "3.0.0"
 source = { registry = "https://pypi.org/simple" }
@@ -2439,57 +2490,6 @@ version = "12.8.90"
 source = { registry = "https://pypi.org/simple" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a2/eb/86626c1bbc2edb86323022371c39aa48df6fd8b0a1647bc274577f72e90b/nvidia_nvtx_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:5b17e2001cc0d751a5bc2c6ec6d26ad95913324a4adb86788c944f8ce9ba441f", size = 89954, upload-time = "2025-03-07T01:42:44.131Z" },
-]
-
-[[package]]
-name = "openastros"
-version = "0.1.0"
-source = { editable = "." }
-dependencies = [
-    { name = "asyncstdlib" },
-    { name = "atdata" },
-    { name = "matplotlib" },
-    { name = "python-dotenv" },
-    { name = "scikit-image" },
-    { name = "scikit-learn" },
-    { name = "scipy" },
-    { name = "toile" },
-    { name = "umap-learn" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "allensdk" },
-    { name = "jupyter" },
-    { name = "modal" },
-    { name = "pytest" },
-    { name = "pytest-cov" },
-    { name = "torch" },
-    { name = "transformers" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "asyncstdlib", specifier = ">=3.13.1" },
-    { name = "atdata", specifier = ">=0.1.2b1" },
-    { name = "matplotlib", specifier = ">=3.10.7" },
-    { name = "python-dotenv", specifier = ">=1.2.1" },
-    { name = "scikit-image", specifier = ">=0.25.2" },
-    { name = "scikit-learn", specifier = ">=1.7.2" },
-    { name = "scipy", specifier = ">=1.16.3" },
-    { name = "toile", specifier = ">=0.1.1a2" },
-    { name = "umap-learn", specifier = ">=0.5.9.post2" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "allensdk", specifier = ">=0.16.3" },
-    { name = "jupyter", specifier = ">=1.1.1" },
-    { name = "modal", specifier = ">=1.2.1" },
-    { name = "pytest", specifier = ">=8.4.2" },
-    { name = "pytest-cov", specifier = ">=7.0.0" },
-    { name = "torch", specifier = ">=2.9.0" },
-    { name = "transformers", specifier = ">=4.57.1" },
 ]
 
 [[package]]
