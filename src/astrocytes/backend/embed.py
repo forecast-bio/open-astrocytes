@@ -420,8 +420,7 @@ class ImageEmbedder:
         
         dataset = atdata.Dataset[sample_type]( url )
         # return atdata.Dataset[sample_type]( url )
-
-        pipeline: Iterable[dict]
+        
         pipeline = dataset.ordered( batch_size = None )
         pipeline.append( wds.filters.map( _process_sample ) )
         # Form batch after applying preprocessing filter
