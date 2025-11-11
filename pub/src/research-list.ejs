@@ -1,9 +1,0 @@
-<div class="list quarto-listing-default">
-<% for (const item of items) { %>
-<div class="quarto-post image-right"><div class="thumbnail"><a href="<%- item.link %>"><!-- preview image tag here --></a></a></div><div class="body"><a href="<%- item.link %>"><h3 class="no-anchor listing-title"><%= item.title %></h3><div class="listing-subtitle"><%= item.subtitle %></div></a><div class="listing-categories">
-<% for (const category of item.categories) { %><div class="listing-category" onclick="window.quartoListingCategory('<%=category%>'); return false;"><%= category %></div>
-<% } %>
-</div><a href="<%- item.link %>"><div class="delink listing-description"><%= item.description %></div></a></div><div class="metadata"><a href="<%- item.link %>"><p><%- item.date %></p><p><%- item.author %></p></a></div></div>
-
-<% } %>
-</div>
