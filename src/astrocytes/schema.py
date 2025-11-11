@@ -38,7 +38,8 @@ class ExperimentFrame( ABC ):
         """Convert a generic Frame to this specific kind of Frame"""
         pass
 
-##
+## Embeddings
+# TODO Add task-specific metadata classes
 
 @dataclass
 class EmbeddingPCResult( atdata.PackableSample ):
@@ -110,7 +111,7 @@ class BathApplicationFrame( atdata.PackableSample, ExperimentFrame ):
 def _specify_bath_application( s: ts.Frame ) -> BathApplicationFrame:
     assert s.metadata is not None
     return BathApplicationFrame(
-        # TODO
+        # TODO Correctly parse metadata
         applied_compound = 'unknown',
         image = s.image,
         t_index = s.metadata['frame']['t_index'],
@@ -168,21 +169,24 @@ class UncagingFrame( atdata.PackableSample ):
     ## Specification lenses
 
     @staticmethod
-    @atdata.lens
     def from_generic( s: ts.Frame ) -> 'UncagingFrame':
-        
-        assert s.metadata is not None
-        
-        return UncagingFrame(
-            # TODO
-            uncaged_compound = 'unknown',
-            image = s.image,
-            t_index = s.metadata['frame']['t_index'],
-            t = s.metadata['frame']['t'],
-            #
-            date_acquired = s.metadata['date_acquired'],
-            movie_uuid = s.metadata['uuid'],
-        )
+        return _specify_uncaging( s )
+
+# Register lenses
+
+@atdata.lens
+def _specify_uncaging( s: ts.Frame ) -> UncagingFrame:
+    assert s.metadata is not None
+    return UncagingFrame(
+        # TODO Correctly parse metadata
+        uncaged_compound = 'unknown',
+        image = s.image,
+        t_index = s.metadata['frame']['t_index'],
+        t = s.metadata['frame']['t'],
+        #
+        date_acquired = s.metadata['date_acquired'],
+        movie_uuid = s.metadata['uuid'],
+    )
 
 
 #
