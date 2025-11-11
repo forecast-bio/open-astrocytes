@@ -1,0 +1,40 @@
+[project]
+name = "astrocytes"
+version = "0.1.1a1"
+description = "TODO"
+readme = "README.md"
+authors = [
+    { name = "Maxine Levesque", email = "170461181+maxinelevesque@users.noreply.github.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "asyncstdlib>=3.13.1",
+    "atdata>=0.1.2b1",
+    "matplotlib>=3.10.7",
+    "python-dotenv>=1.2.1",
+    "scikit-image>=0.25.2",
+    "scikit-learn>=1.7.2",
+    "scipy>=1.16.3",
+    "toile>=0.1.1a2",
+]
+
+[project.scripts]
+astrocytes = "astrocytes:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+addopts = "--cov=atdata --cov-report=html"
+
+[dependency-groups]
+dev = [
+    # "allensdk>=0.16.3",
+    "jupyter>=1.1.1",
+    "modal>=1.2.1",
+    "pytest>=8.4.2",
+    "pytest-cov>=7.0.0",
+    "torch>=2.9.0",
+    "transformers>=4.57.1",
+]
