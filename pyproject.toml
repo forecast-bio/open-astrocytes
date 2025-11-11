@@ -16,7 +16,6 @@ dependencies = [
     "scikit-learn>=1.7.2",
     "scipy>=1.16.3",
     "toile>=0.1.1a2",
-    "umap-learn>=0.5.9.post2",
 ]
 
 [project.scripts]
