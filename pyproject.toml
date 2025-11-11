@@ -30,7 +30,7 @@ addopts = "--cov=atdata --cov-report=html"
 
 [dependency-groups]
 dev = [
-    "allensdk>=0.16.3",
+    # "allensdk>=0.16.3",
     "jupyter>=1.1.1",
     "modal>=1.2.1",
     "pytest>=8.4.2",
