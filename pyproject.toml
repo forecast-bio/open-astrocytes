@@ -1,6 +1,6 @@
 [project]
 name = "astrocytes"
-version = "0.1.0"
+version = "0.1.1a1"
 description = "TODO"
 readme = "README.md"
 authors = [
@@ -25,6 +25,9 @@ astrocytes = "astrocytes:main"
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+addopts = "--cov=atdata --cov-report=html"
 
 [dependency-groups]
 dev = [
