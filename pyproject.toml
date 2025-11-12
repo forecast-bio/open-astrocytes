@@ -28,6 +28,11 @@ build-backend = "hatchling.build"
 [tool.pytest.ini_options]
 addopts = "--cov=astrocytes --cov-report=html"
 
+[tool.coverage.run]
+omit = [
+    "src/astrocytes/backend/*",
+]
+
 [dependency-groups]
 dev = [
     # "allensdk>=0.16.3",
