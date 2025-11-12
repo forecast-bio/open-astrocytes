@@ -1,41 +1,16 @@
 """OpenAstrocyte-specific dataset schemas"""
 
 ##
-# Imports
+# Expose types
 
-import atdata
-import toile.schema as ts
-
-from enum import Enum
-from dataclasses import dataclass
-from abc import ABC, abstractmethod
-from datetime import datetime
-
-import numpy as np
-
-from typing import (
-    Literal,
-    TypeAlias,
-    Self,
-    Any,
+from ._datasets._bath_application import (
+    BathApplicationCompound,
+    BathApplicationFrame,
 )
-from numpy.typing import (
-    NDArray,
+from ._datasets._uncaging import (
+    UncagingCompound,
+    UncagingFrame,
 )
-
-
-##
-# Sample types
-
-## Embeddings
-
-
-## Bath application
-
-
-## NT Uncaging
-
-
 
 
 #

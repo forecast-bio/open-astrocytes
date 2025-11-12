@@ -136,11 +136,27 @@ class DatasetShortcuts:
 
         self._hive = hive
 
-        self.bath_application = hive.index.generic.bath_application
-        self.uncaging = hive.index.generic.uncaging
+        _ig = hive.index.generic
+        self.bath_application = (
+            _ig.bath_application.dataset if _ig.bath_application is not None
+            else None
+        )
+        self.uncaging = (
+            _ig.uncaging.dataset if _ig.uncaging is not None
+            else None
+        )
 
-        self.bath_application_embeddings = hive.index.embeddings.bath_application
-        self.bath_application_patch_pcs = hive.index.patch_pcs.bath_application
+        _ie = hive.index.embeddings
+        self.bath_application_embeddings = (
+            _ie.bath_application.dataset if _ie.bath_application is not None
+            else None
+        )
+
+        _ip = hive.index.patch_pcs
+        self.bath_application_patch_pcs = (
+            _ip.bath_application.dataset if _ip.bath_application is not None
+            else None
+        )
 
         # TODO more!
 

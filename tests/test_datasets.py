@@ -5,6 +5,17 @@
 
 import pytest
 
+import astrocytes
+
+from toile.schema import (
+    Frame,
+)
+from astrocytes.schema import (
+    BathApplicationFrame,
+    UncagingFrame,
+)
+
+
 
 ##
 # Test units
@@ -15,4 +26,19 @@ def test_placeholder():
 
 def test_uncaging():
     """TODO"""
-    assert False
+    
+    dataset = astrocytes.data.uncaging
+    assert dataset is not None, \
+        'Unable to form uncaging dataset shortcut'
+    
+    sample = next( x for x in dataset.ordered( batch_size = None ) )
+    assert isinstance( sample, Frame ), \
+        f'Incorrect type for uncaging dataset generic sample: {type( sample )}'
+
+    dataset_typed = dataset.as_type( UncagingFrame )
+    sample_typed = next( x for x in dataset.ordered( batch_size = None ) )
+    assert isinstance( sample, UncagingFrame ), \
+        f'Incorrect type for uncaging dataset typed sample: {type( sample_typed )}'
+
+
+#
