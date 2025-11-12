@@ -509,6 +509,7 @@ class ImageEmbedder:
             #
             kind: EmbeddableSampleType = 'Frame',
             #
+            sharded: bool = False,
             verbose: bool = False,
         ) -> str:
         """TODO"""
@@ -625,14 +626,22 @@ class ImageEmbedder:
         output_dir = self.output_path / output_stem
         output_dir.mkdir( parents = True, exist_ok = True )
 
-        output_shard_pattern = f'{output_stem}-%06d.tar'
-        output_pattern = (output_dir / output_shard_pattern).as_posix()
+        if sharded:
+            output_shard_pattern = f'{output_stem}-%06d.tar'
+            output_pattern = (output_dir / output_shard_pattern).as_posix()
+            
+            # all_outputs: list[EmbeddingResult] = reduce( lambda x, y: x + y, ret_batches, [] )
+            with wds.writer.ShardWriter( output_pattern ) as dest:
+                for cur_batch in ret_batches:
+                    for cur_output in cur_batch:
+                        dest.write( cur_output.as_wds )
         
-        # all_outputs: list[EmbeddingResult] = reduce( lambda x, y: x + y, ret_batches, [] )
-        with wds.writer.ShardWriter( output_pattern ) as dest:
-            for cur_batch in ret_batches:
-                for cur_output in cur_batch:
-                    dest.write( cur_output.as_wds )
+        else:
+            output_filename = f'{output_stem}.tar'
+            with wds.writer.TarWriter( output_filename ) as dest:
+                for cur_batch in ret_batches:
+                    for cur_output in cur_batch:
+                        dest.write( cur_output.as_wds )
         
         _vprint( '        Done')
         
