@@ -32,8 +32,9 @@ class TypedDatasetIndex:
 
         # Shortcut
         def _typed_info( name: str, sample_type: Type[ST] )-> DatasetInfo[ST] | None:
-            return DatasetInfo[sample_type]._parse(
+            return DatasetInfo._parse(
                 config.get( name ), 'typed/' + name,
+                sample_type = sample_type,
                 hive_root = hive_root,
             )
         

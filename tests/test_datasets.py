@@ -36,8 +36,8 @@ def test_uncaging():
         f'Incorrect type for uncaging dataset generic sample: {type( sample )}'
 
     dataset_typed = dataset.as_type( UncagingFrame )
-    sample_typed = next( x for x in dataset.ordered( batch_size = None ) )
-    assert isinstance( sample, UncagingFrame ), \
+    sample_typed = next( x for x in dataset_typed.ordered( batch_size = None ) )
+    assert isinstance( sample_typed, UncagingFrame ), \
         f'Incorrect type for uncaging dataset typed sample: {type( sample_typed )}'
 
 

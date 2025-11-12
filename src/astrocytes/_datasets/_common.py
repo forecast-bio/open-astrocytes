@@ -13,6 +13,7 @@ from abc import (
 
 from toile.schema import Frame
 
+import typing
 from typing import (
     Any,
     Type,
@@ -40,6 +41,12 @@ class DatasetInfo( Generic[ST] ):
     # hive_root: str = '.'
     # """The root for the OA data hive"""
 
+    @property
+    def sample_type( self ) -> type[ST]:
+        """The type for each sample in this dataset"""
+        # TODO Figure out why linting fails here
+        return typing.get_args( self.__orig_class__ )[0]
+
     # @property
     # def url( self ) -> str:
     #     """The full WebDataset URL specification for this dataset"""
@@ -48,17 +55,22 @@ class DatasetInfo( Generic[ST] ):
     @property
     def dataset( self ) -> atdata.Dataset[ST]:
         """TODO"""
-        return atdata.Dataset[ST]( self.url )
+        return atdata.Dataset[self.sample_type]( self.url )
 
     @classmethod
     def _parse(
                 cls,
                 config: dict[str, Any] | None,
                 name: str,
-                # sample_type: Type[ST],
+                # TODO Would like to avoid this!
+                sample_type: Type[ST],
                 hive_root: str = '',
             ) -> 'DatasetInfo[ST] | None':
         
+        # TODO This is kind of a kludge
+        # sample_type = typing.get_args( cls.__orig_bases__[0] )[0]
+        # print( sample_type )
+
         if config is None:
             return None
         
@@ -66,7 +78,7 @@ class DatasetInfo( Generic[ST] ):
             assert 'path' in config
             assert isinstance( config['path'], str )
 
-            ret = DatasetInfo[ST](
+            ret = DatasetInfo[sample_type](
                 name = name,
                 url = hive_root + config['path'],
             )
@@ -84,12 +96,16 @@ class GenericDatasetIndex:
             ):
         """TODO"""
 
+        print( 'hello!' )
+
         # Shortcut
         def _generic_info( name: str ) -> DatasetInfo[Frame] | None:
-            return DatasetInfo[Frame]._parse(
+            ret = DatasetInfo._parse(
                 config.get( name ), 'generic/' + name,
+                sample_type = Frame,
                 hive_root = hive_root,
             )
+            return ret
 
         self.bath_application = _generic_info( 'bath_application' )
         self.uncaging = _generic_info( 'uncaging' )

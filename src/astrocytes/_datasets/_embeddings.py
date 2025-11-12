@@ -33,8 +33,9 @@ class EmbeddingsDatasetIndex:
 
         # TODO Shortcut; implies better way to generalize
         def _typed_info( name: str, sample_type: Type[ST] = EmbeddingResult ) -> DatasetInfo[ST] | None:
-            return DatasetInfo[sample_type]._parse(
+            return DatasetInfo._parse(
                 config.get( name ), 'embeddings/' + name,
+                sample_type = sample_type,
                 hive_root = hive_root,
             )
         
@@ -53,8 +54,9 @@ class PatchPCsDatasetIndex:
 
         # TODO Shortcut; implies better way to generalize
         def _typed_info( name: str, sample_type: Type[ST] = EmbeddingPCResult ) -> DatasetInfo[ST] | None:
-            return DatasetInfo[sample_type]._parse(
+            return DatasetInfo._parse(
                 config.get( name ), 'patch-pcs/' + name,
+                sample_type = sample_type,
                 hive_root = hive_root,
             )
         
