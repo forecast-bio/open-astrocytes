@@ -5,11 +5,15 @@
 
 from ._datasets import (
     Hive,
-    _DEFAULT_HIVE_ROOT,
+    DatasetShortcuts,
 )
 
 
 ##
 # Expose 
 
-hive = Hive( root = _DEFAULT_HIVE_ROOT )
+hive = Hive()
+data = DatasetShortcuts( hive )
+
+
+#
