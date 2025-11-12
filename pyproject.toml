@@ -1,6 +1,6 @@
 [project]
 name = "astrocytes"
-version = "0.1.1a1"
+version = "0.1.1a2"
 description = "TODO"
 readme = "README.md"
 authors = [
