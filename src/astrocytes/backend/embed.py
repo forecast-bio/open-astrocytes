@@ -17,7 +17,7 @@ from numpy.typing import NDArray
 ##
 # Constants
 
-MODAL_APP_NAME = 'oopenastros-backend-embed'
+MODAL_APP_NAME = 'astrocytes-backend--embed'
 
 
 #
@@ -66,18 +66,6 @@ hf_cache_path = '/root/.cache/huggingface'
 hf_cache_vol = modal.Volume.from_name( f'{MODAL_APP_NAME}--huggingface-cache',
     create_if_missing = True,
 )
-
-# TODO
-# cf_account_id = '2e1187bafb5390c22f731127dd203731'
-# r2_secret = modal.Secret.from_name( '' )
-
-# input_data_path = '/root/data/remote/astro_datasets_dev'
-# input_data_vol = modal.CloudBucketMount(
-#     bucket_name = "astro-datasets-dev",
-#     bucket_endpoint_url = f"https://{cf_account_id}.r2.cloudflarestorage.com",
-#     secret = r2_secret,
-#     read_only = True
-# )
 
 output_data_path = '/root/data/output'
 output_data_vol = modal.Volume.from_name( f'{MODAL_APP_NAME}--output-data',
@@ -322,183 +310,17 @@ class ImageEmbedder:
         
         else:
             raise ValueError( f'Unsupported sample type: {sample_type}' )
-
-        # def _process_image( x: dict[str, Any] ):
-        #     """Runs `self.processor` on the 'image' part of an input dataset item"""
-            
-        #     ret = dict()
-            
-        #     for k, v in x.items():
-
-        #         if k == 'image':
-
-        #             # Form PIL RGB image from grayscale
-        #             rgb_array = np.stack( [v, v, v], axis = -1 )
-
-        #             # TODO determine scaling in preprocessing
-        #             if rgb_array.dtype != np.uint8:
-
-        #                 # print( 'Performing conversion' )
-
-        #                 if rgb_array.dtype == np.uint16:
-        #                     max_val = np.max( rgb_array )
-        #                     if max_val < 256:
-        #                         rgb_array = rgb_array.astype( np.uint8 )
-        #                     else:
-        #                         # print( 'Performing scaling' )
-        #                         tmp = (255. / max_val) * rgb_array.astype( float )
-        #                         # print( np.max( tmp ) )
-        #                         tmp = np.floor( tmp )
-        #                         rgb_array = tmp.astype( np.uint8 )
-                        
-        #                 else:
-        #                     # print( 'Performing scaling+conversion' )
-        #                     max_val = np.max( rgb_array )
-        #                     tmp = rgb_array * (256 / max_val)
-        #                     tmp = np.floor( tmp )
-        #                     rgb_array = tmp.astype( np.uint8 )
-
-        #                 new_max_val = np.max( rgb_array )
-                    
-        #             cur_image = Image.fromarray( rgb_array )
-                    
-        #             ret[k] = self.processor(
-        #                 images = cur_image,
-        #                 return_tensors = "pt",
-        #             ).pixel_values
-                
-        #         else:
-        #             ret[k] = v
-            
-        #     #
-
-        #     return ret
-
-        ##
-
-        # dataset = wds.pipeline.DataPipeline(
-        #     # Break out all of the shards implied in the `url`
-        #     wds.shardlists.SimpleShardList( url ),
-
-        #     # Shuffle the shards
-        #     # wds.shuffle( 100 ),
-        #     # Split shards across workers
-        #     wds.shardlists.split_by_worker,
-        #     # Extract samples
-        #     wds.tariterators.tarfile_to_samples(),
-
-        #     #
-
-        #     # Shuffle samples in-memory
-        #     # wds.shuffle( SHUFFLE_BUFFER ),
-
-        #     #
-
-        #     wds.filters.map( _decode_item ),
-        #     wds..filters.map( _process_image ),
-
-        #     #
-
-        #     # wds.shuffle( 10_000 ),
-        #     wds.batched( batch_size ),
-        # )
-
-        # dataset = (
-        #     wds.WebDataset(
-        #             TEST_WDS_URL,
-        #             shardshuffle = True,
-        #         )
-        #         .shuffle( 10_000 )
-        #         # .decode()
-        #         .map( _decode_item )
-        #         .map( _process_image )
-        # )
-
-        # self.loader = dataset
-
-        # self.loader = wds.WebLoader( dataset, num_workers = 8 )
         
         dataset = atdata.Dataset[sample_type]( url )
-        # return atdata.Dataset[sample_type]( url )
         
         pipeline = dataset.ordered( batch_size = None )
         pipeline.append( wds.filters.map( _process_sample ) )
-        # Form batch after applying preprocessing filter
+        # Form batch after applying sample-wise preprocessing filter
         pipeline.append( wds.filters.batched( batch_size ) )
         return pipeline
-        # return wds.compat.WebLoader( pipeline, num_workers = num_workers )
-
-
-    # def _extract_meta( self, x: EmbeddingResult ) -> dict[str, Any]:
-    #     """TODO"""
-    #     import torch
-
-    #     MAIN_KEYS = [
-    #         'mouse_id',
-    #         'slice_number',
-    #         'intervention',
-    #         'replicate',
-    #         # 'uuid',
-    #         'date_acquired',
-    #     ]
-    #     FRAME_KEYS = [
-    #         't_index',
-    #         't',
-    #     ]
-
-    #     x_meta = x.metadata
-
-    #     ret = dict()
-
-    #     for k in MAIN_KEYS:
-    #         v = x_meta.get( k )[0]
-    #         if type( v ) == torch.Tensor:
-    #             ret[k] = v.item()
-    #         else:
-    #             ret[k] = v
         
-    #     if 'frame' in x_meta:
-    #         for k in FRAME_KEYS:
-    #             v = x_meta['frame'].get( k )[0]
-    #             if type( v ) == torch.Tensor:
-    #                 ret[k] = v.item()
-    #             else:
-    #                 ret[k] = v
-
-    #     return ret
-    
-    # def _export_results_wds( self, results: list[EmbeddingResult], name: str ) -> str:
-    #     """TODO"""
-
-    #     import json
-    #     # from io import BytesIO
-
-    #     # import numpy as np
-    #     # import torch
-
-    #     import webdataset as wds
-
-    #     #
-
-    #     output_path = self.output_path / name
-
-    #     with wds.writer.TarWriter( output_path.as_posix() ) as sink:
-
-    #         for i_result, result in enumerate( results ):
-    #             new_entry = {
-    #                 '__key__': f'sample{i_result:06d}',
-    #                 'image_embeddings.npz': {
-    #                     'cls': result.cls,
-    #                     'registers': result.registers,
-    #                     'patches': result.patches,
-    #                 },
-    #                 'metadata.json': json.dumps(
-    #                     self._extract_meta( result )
-    #                 ),
-    #             }
-    #             sink.write( new_entry )
-
-    #     return output_path.as_posix()
+        # TODO get 
+        # return wds.compat.WebLoader( pipeline, num_workers = num_workers )
 
     ##
 
@@ -604,12 +426,6 @@ class ImageEmbedder:
                     #
                     metadata = cur_metadatas[i],
                 )
-                # EmbeddingResult(
-                #     metadata = cur_metadatas[i],
-                #     cls = cls_token[i, :],
-                #     registers = register_features[i, :, :],
-                #     patches = patch_features[i, :, :],
-                # )
                 for i in range( cls_token.shape[0] )
             ]
             ret_batches.append( cur_batch_ret )
@@ -662,3 +478,6 @@ class ImageEmbedder:
     @modal.exit()
     def _container_shutdown( self ):
         pass
+
+
+#
