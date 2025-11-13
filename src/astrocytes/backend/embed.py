@@ -635,21 +635,23 @@ class ImageEmbedder:
                 for cur_batch in ret_batches:
                     for cur_output in cur_batch:
                         dest.write( cur_output.as_wds )
+            
+            output_loc = (
+                output_dir
+                / (f'{output_stem}-' + '{shard_id}.tar')
+            ).as_posix()
         
         else:
             output_filename = f'{output_stem}.tar'
-            with wds.writer.TarWriter( output_filename ) as dest:
+            output_path = (output_dir / output_filename).as_posix()
+            with wds.writer.TarWriter( output_path ) as dest:
                 for cur_batch in ret_batches:
                     for cur_output in cur_batch:
                         dest.write( cur_output.as_wds )
+            
+            output_loc = output_path
         
         _vprint( '        Done')
-        
-        output_loc = (
-            output_dir
-            / (f'{output_stem}-' + '{shard_id}.tar')
-        ).as_posix()
-
         _vprint( 'All Done! Output written to:' )
         _vprint( f'    {output_loc}' )
         
