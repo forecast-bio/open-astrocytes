@@ -11,6 +11,12 @@ from ._datasets._uncaging import (
     UncagingCompound,
     UncagingFrame,
 )
+from ._datasets._embeddings import (
+    EmbeddingResult,
+    EmbeddingPCResult,
+    #
+    patch_pc_projector,
+)
 
 
 #

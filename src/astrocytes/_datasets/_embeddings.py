@@ -68,17 +68,7 @@ class PatchPCsDatasetIndex:
 # Schema
 
 ## Sample types
-# TODO Add task-specific metadata classes
-
-@dataclass
-class EmbeddingPCResult( atdata.PackableSample ):
-    """TODO"""
-    ##
-    patch_pcs: NDArray
-    """TODO"""
-    #
-    metadata: dict[str, Any] | None = None
-    """TODO"""
+# TODO Add task-specific metadata breakout classes
 
 @dataclass
 class EmbeddingResult( atdata.PackableSample ):
@@ -94,6 +84,33 @@ class EmbeddingResult( atdata.PackableSample ):
     #
     metadata: dict[str, Any] | None = None
     """TODO"""
+
+@dataclass
+class EmbeddingPCResult( atdata.PackableSample ):
+    """TODO"""
+    ##
+    patch_pcs: NDArray
+    """TODO"""
+    #
+    metadata: dict[str, Any] | None = None
+    """TODO"""
+
+# Lenses
+
+def patch_pc_projector( components: NDArray ) -> atdata.Lens:
+    """Registers and returns a lens that computes patch PCs for embeddings"""
+
+    @atdata.lens
+    def _embedding_patch_pcs( source: EmbeddingResult ) -> EmbeddingPCResult:
+        assert source.patches is not None, \
+            'Source embedding result has no patch embeddings'
+        
+        return EmbeddingPCResult(
+            patch_pcs = (components @ source.patches.T).T,
+            metadata = source.metadata,
+        )
+
+    return _embedding_patch_pcs
 
 
 #
