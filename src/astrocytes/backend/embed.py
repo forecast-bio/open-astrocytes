@@ -224,33 +224,28 @@ class ImageEmbedder:
             """Runs `self.processor` on the 'image' part of an input dataset item"""
 
             # Form PIL RGB image from grayscale
+            # TODO Check dims to donly do this for grayscale images
             rgb_array = np.stack( [v, v, v], axis = -1 )
-            # print( rgb_array.shape )
 
             # TODO determine scaling in preprocessing
             if rgb_array.dtype != np.uint8:
-
-                # print( 'Performing conversion' )
 
                 if rgb_array.dtype == np.uint16:
                     max_val = np.max( rgb_array )
                     if max_val < 256:
                         rgb_array = rgb_array.astype( np.uint8 )
                     else:
-                        # print( 'Performing scaling' )
                         tmp = (255. / max_val) * rgb_array.astype( float )
-                        # print( np.max( tmp ) )
                         tmp = np.floor( tmp )
                         rgb_array = tmp.astype( np.uint8 )
                 
                 else:
-                    # print( 'Performing scaling+conversion' )
                     max_val = np.max( rgb_array )
                     tmp = rgb_array * (256 / max_val)
                     tmp = np.floor( tmp )
                     rgb_array = tmp.astype( np.uint8 )
 
-                new_max_val = np.max( rgb_array )
+                # new_max_val = np.max( rgb_array )
             
             cur_image = Image.fromarray( rgb_array )
             
@@ -261,6 +256,7 @@ class ImageEmbedder:
 
 
         if sample_type == ts.Frame:
+
             def _f1( x: ts.Frame ) -> dict:
                 ret = dict()
 
@@ -278,6 +274,7 @@ class ImageEmbedder:
             _process_sample = _f1
         
         elif sample_type == os.BathApplicationFrame:
+
             def _f2( x: os.BathApplicationFrame ) -> dict:
                 ret = dict()
 
@@ -335,9 +332,6 @@ class ImageEmbedder:
         """TODO"""
 
         import torch
-        # from transformers.image_utils import load_image
-        # from PIL import Image
-        # import numpy as np
 
         from functools import reduce
 
@@ -395,8 +389,6 @@ class ImageEmbedder:
                 outputs = self.model( pixel_values = inputs )
             _vprint( '        Done' )
 
-            # outputs = outputs_gpu
-
             _vprint( '    Forming outputs' )
             last_hidden_states = outputs.last_hidden_state.to( 'cpu' )
             assert (
@@ -441,10 +433,10 @@ class ImageEmbedder:
         output_dir.mkdir( parents = True, exist_ok = True )
 
         if sharded:
+
             output_shard_pattern = f'{output_stem}-%06d.tar'
             output_pattern = (output_dir / output_shard_pattern).as_posix()
             
-            # all_outputs: list[EmbeddingResult] = reduce( lambda x, y: x + y, ret_batches, [] )
             with wds.writer.ShardWriter( output_pattern ) as dest:
                 for cur_batch in ret_batches:
                     for cur_output in cur_batch:
@@ -456,8 +448,10 @@ class ImageEmbedder:
             ).as_posix()
         
         else:
+
             output_filename = f'{output_stem}.tar'
             output_path = (output_dir / output_filename).as_posix()
+
             with wds.writer.TarWriter( output_path ) as dest:
                 for cur_batch in ret_batches:
                     for cur_output in cur_batch:
@@ -465,6 +459,8 @@ class ImageEmbedder:
             
             output_loc = output_path
         
+        #
+
         _vprint( '        Done')
         _vprint( 'All Done! Output written to:' )
         _vprint( f'    {output_loc}' )
