@@ -17,12 +17,23 @@ from numpy.typing import NDArray
 ##
 # Constants
 
+MINUTES = 60
+
+# Hyperparameters
+# TODO Migrate to `chz` for config
+
 MODAL_APP_NAME = 'astrocytes-backend--embed'
 
+MAX_CONTAINERS = 5
 
-#
+# Only process this number of copies of the model simultaneously, to stay
+# within GPU VRAM (for larger embedding models)
+MAX_INPUTS_PER_CONTAINER = 1
 
-MINUTES = 60
+# how long should we stay up with no requests?
+SCALEDOWN_WINDOW = 3 * MINUTES
+# how long should we wait for startup + single embed execution?
+TIMEOUT = 10 * MINUTES
 
 
 ##
@@ -77,7 +88,8 @@ output_data_vol = modal.Volume.from_name( f'{MODAL_APP_NAME}--output-data',
 _embedding_config = {
     'cpu': 4.,
     # 'gpu': 'A10',
-    'gpu': 'A100',
+    'gpu': 'A100', # we go bigly
+    # TODO figure out how Modal is doing this, ignores this arg rn
     # 'memory': 10 * 1_024,
     
     'enable_memory_snapshot': True,
@@ -85,20 +97,17 @@ _embedding_config = {
         "enable_gpu_snapshot": True,
     },
 
-    # how long should we stay up with no requests?
-    'scaledown_window': 3 * MINUTES,
-    # how long should we wait for container start?
-    'timeout': 10 * MINUTES,
+    'scaledown_window': SCALEDOWN_WINDOW,
+    'timeout': TIMEOUT,
 
     'volumes': {
-        '/root/.cache/huggingface': hf_cache_vol,
-        # input_data_path: input_data_vol,
+        hf_cache_path: hf_cache_vol,
         output_data_path: output_data_vol,
     },
 
     'secrets': [
+        # TODO Make more public-friendly nomenclature
         modal.Secret.from_name( 'testing-hf' ),
-        # r2_secret,
     ]
 }
 
@@ -122,15 +131,6 @@ EmbeddableSampleType: TypeAlias = Literal[
 
 ##
 
-# from pydantic import BaseModel
-# from numpydantic import NDArray
-
-# class EmbeddingResult( BaseModel ):
-#     metadata: Dict[str, Any]
-#     cls: NDArray
-#     registers: NDArray
-#     patches: NDArray
-
 @dataclass
 class EmbeddingResult( atdata.PackableSample ):
     """TODO"""
@@ -144,14 +144,12 @@ class EmbeddingResult( atdata.PackableSample ):
 
 @app.cls(
     image = _image,
-    max_containers = 5,
+    max_containers = MAX_CONTAINERS,
 
     **_embedding_config
 )
 @modal.concurrent(
-    # Only process one copy of the model simultaneously, to stay within
-    # GPU VRAM
-    max_inputs = 1,
+    max_inputs = MAX_INPUTS_PER_CONTAINER,
 )
 class ImageEmbedder:
     """TODO"""
