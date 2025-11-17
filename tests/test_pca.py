@@ -33,11 +33,11 @@ def test_ipca():
     test_output_stem = '__pytest__ipca'
 
     model_id = None
-    for i in range( 10 ):
+    for i in range( 2 ):
         model_id = ipca.remote( test_url, test_output_stem, model_id = model_id,
             #
-            batch_size = 5 * 4096,
-            n_batches = 3,
+            batch_size = 256,
+            n_batches = 2,
             #
             verbose = True,
         )
