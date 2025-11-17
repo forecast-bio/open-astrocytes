@@ -43,7 +43,7 @@ jobs:
           MODAL_TOKEN_SECRET: ${{ secrets.MODAL_TOKEN_SECRET }}
           MODAL_ENVIRONMENT: ${{ secrets.MODAL_ENVIRONMENT }}
         run: |
-          modal config set-environment $MODAL_ENVIRONMENT
+          uv run -- modal config set-environment $MODAL_ENVIRONMENT
           uv run pytest
 
 #
