@@ -24,10 +24,10 @@ jobs:
         with:
           python-version-file: "pyproject.toml"
 
-      - name: Install system `hdf5` dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y libhdf5-serial-dev liblzo2-dev libbz2-dev libblosc2-dev
+      # - name: Install system `hdf5` dependencies
+      #   run: |
+      #     sudo apt update
+      #     sudo apt install -y libhdf5-serial-dev liblzo2-dev libbz2-dev libblosc2-dev
 
       - name: Install `uv`
         uses: astral-sh/setup-uv@v6
@@ -37,9 +37,13 @@ jobs:
         # TODO Better to use --locked for author control over versions?
         run: uv sync --locked --all-extras --dev
 
-      - name: Run tests
+      - name: Run tests in modal CI/CD environment
         env:
           MODAL_TOKEN_ID: ${{ secrets.MODAL_TOKEN_ID }}
           MODAL_TOKEN_SECRET: ${{ secrets.MODAL_TOKEN_SECRET }}
           MODAL_ENVIRONMENT: ${{ secrets.MODAL_ENVIRONMENT }}
-        run: uv run pytest
+        run: |
+          uv run -- modal config set-environment $MODAL_ENVIRONMENT
+          uv run pytest
+
+#

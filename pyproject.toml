@@ -1,12 +1,12 @@
 [project]
 name = "astrocytes"
-version = "0.1.1a3"
+version = "0.1.1a4"
 description = "TODO"
 readme = "README.md"
 authors = [
     { name = "Maxine Levesque", email = "170461181+maxinelevesque@users.noreply.github.com" }
 ]
-requires-python = ">=3.12"
+requires-python = ">=3.12,<3.14"
 dependencies = [
     "asyncstdlib>=3.13.1",
     "atdata>=0.1.2b1",
