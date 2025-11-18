@@ -95,6 +95,27 @@ class EmbeddingPCResult( atdata.PackableSample ):
     metadata: dict[str, Any] | None = None
     """TODO"""
 
+#
+
+@dataclass
+class PatchEmbeddingTrace( atdata.PackableSample ):
+    """TODO"""
+    ##
+    values: NDArray
+    """TODO"""
+    ts: NDArray
+    """TODO"""
+    #
+    i_patch: int | None = None
+    """First index (image vertical axis) of the location of the source patch"""
+    j_patch: int | None = None
+    """First index (image vertical axis) of the location of the source patch"""
+    #
+    metadata: dict[str, Any] | None = None
+    """TODO"""
+
+
+##
 # Lenses
 
 def patch_pc_projector( components: NDArray ) -> atdata.Lens:
