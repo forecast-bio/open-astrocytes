@@ -1,8 +1,8 @@
 # open-astrocytes
 
-**Open data and models for astrocyte dynamics**
+**OpenAstrocytes: Open data and models for astrocyte dynamics**
 
-A Python library for discovering, loading, and processing experimental imaging datasets from astrocyte neuroscience research. Built on a cloud-hosted data repository.
+A Python library for discovering, loading, and processing experimental imaging datasets from astrocyte neuroscience research using cloud-hosted data infrastructure.
 
 [![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue.svg)](https://www.python.org/downloads/)
 
@@ -11,7 +11,9 @@ A Python library for discovering, loading, and processing experimental imaging d
 - **Unified Data Discovery**: Access experimental datasets through a single `Hive` interface backed by cloud-hosted manifests
 - **Type-Safe Schemas**: Strongly-typed dataclasses for different experiment types (bath application, photochemical uncaging)
 - **Lens Transformations**: Composable data pipelines for converting raw frames to typed experiments
-- **WebDataset Format**: Streaming-friendly TAR archives for efficient cloud storage and access
+- **`atdata` + WebDataset Format**: Streaming-friendly, schematized TAR archives for efficient cloud storage and access
+
+> To see OpenAstrocytes in action, check out [the demo in our release pub](https://forecast.bio/research/open-astrocytes).
 
 ## Installation
 
@@ -249,14 +251,15 @@ See [CLAUDE.md](./CLAUDE.md) for detailed development guidelines.
 
 ## Citation
 
-If you use this library in your research, please cite:
+If you use this library in your research, and please cite:
 
 ```bibtex
-@software{open_astrocytes,
-  title = {open-astrocytes: Open data and models for astrocyte dynamics},
-  author = {Levesque, Maxine},
+@article{levesque2025openastrocytes,
+  author = {Maxine Levesque and Kira Poskanzer},
+  title = {OpenAstrocytes},
+  journal = {Forecast Research},
   year = {2025},
-  url = {https://github.com/your-org/open-astrocytes}
+  note = {https://forecast.bio/research/open-astrocytes/},
 }
 ```
 
