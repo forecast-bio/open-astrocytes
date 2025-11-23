@@ -4,7 +4,7 @@
 
 A Python library for discovering, loading, and processing experimental imaging datasets from astrocyte neuroscience research using cloud-hosted data infrastructure.
 
-—❤️‍🔥, [Forecast](https://forecast.bio/)
+—❤️‍🔥 [Forecast](https://forecast.bio/)
 
 [![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue.svg)](https://www.python.org/downloads/)
 
@@ -273,6 +273,6 @@ This project is licensed under the [Mozilla Public License 2.0](LICENSE.md) - se
 
 Developed by the Open Science team [Forecast](https://forecast.bio/research/).
 
-Docs and README largely by Claude. If they hallucinated, let us know in the [Issues](./issues/)!
+Docs and README largely by Claude. If they hallucinated, let us know in the [Issues](https://github.com/forecast-bio/open-astrocytes/issues/)!
 
 Support for the production of OpenAstrocytes at Forecast was generously provided by the Special Initiatives division of the [Astera Institute](https://astera.org/).
