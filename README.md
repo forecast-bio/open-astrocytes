@@ -94,7 +94,7 @@ from astrocytes.schema import BathApplicationFrame
 generic_dataset = astrocytes.data.bath_application
 
 # Apply lens transformation to get typed frames
-typed_dataset = generic_dataset.as_type(BathApplicationFrame.from_generic)
+typed_dataset = generic_dataset.as_type(BathApplicationFrame)
 
 # Now iterate with full type information
 for frame in typed_dataset.ordered(batch_size=None):
@@ -117,11 +117,13 @@ embeddings = data.bath_application_embeddings
 for result in embeddings.ordered(batch_size=None):
     print(f"CLS embedding shape: {result.cls_embedding.shape}")
     print(f"Patch embeddings shape: {result.patches.shape}")  # (h, w, embedding_dim)
+    break
 
 # Access pre-computed PCA projections
 pca_results = data.bath_application_patch_pcs
 for result in pca_results.ordered(batch_size=None):
     print(f"Patch PCs shape: {result.patch_pcs.shape}")  # (h, w, n_components)
+    break
 ```
 
 ### Experiment Types
@@ -138,14 +140,15 @@ for frame in typed_dataset.ordered(batch_size=None):
     if frame.applied_compound == 'baclofen':
         # Analyze GABA_B receptor activation
         pass
+    # ...
 ```
 
 #### Photochemical Uncaging
 
-Experiments using laser photolysis to release caged neurotransmitters:
+Experiments using two-photon photo-uncaging to release caged neurotransmitters:
 
 ```python
-from astrocytes.schema import UncagingFrame, UncagingCompound
+from astrocytes.schema import UncagingFrame
 
 dataset = astrocytes.data.uncaging
 typed = dataset.map(UncagingFrame.from_generic)
@@ -155,6 +158,7 @@ for frame in typed.ordered(batch_size=None):
     if frame.uncaged_compound == 'glu':
         # Analyze glutamate uncaging response
         pass
+    # ...
 ```
 
 ## Dataset Shortcuts
@@ -177,7 +181,7 @@ astrocytes.data.bath_application_patch_pcs    # EmbeddingPCResult
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/open-astrocytes.git
+git clone https://github.com/forecast-bio/open-astrocytes.git
 cd open-astrocytes
 
 # Install with development dependencies using uv
