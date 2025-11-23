@@ -1,8 +1,10 @@
-# open-astrocytes
+# astrocytes
 
-**OpenAstrocytes: Open data and models for astrocyte dynamics**
+💫 **OpenAstrocytes: Open data and models for astrocyte dynamics**
 
 A Python library for discovering, loading, and processing experimental imaging datasets from astrocyte neuroscience research using cloud-hosted data infrastructure.
+
+—❤️‍🔥, [Forecast](https://forecast.bio/)
 
 [![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue.svg)](https://www.python.org/downloads/)
 
@@ -13,7 +15,7 @@ A Python library for discovering, loading, and processing experimental imaging d
 - **Lens Transformations**: Composable data pipelines for converting raw frames to typed experiments
 - **`atdata` + WebDataset Format**: Streaming-friendly, schematized TAR archives for efficient cloud storage and access
 
-> To see OpenAstrocytes in action, check out [the demo in our release pub](https://forecast.bio/research/open-astrocytes).
+> To see OpenAstrocytes in action, check out [the demo in our release pub](https://forecast.bio/research/open-astrocytes/).
 
 ## Installation
 
@@ -269,4 +271,6 @@ This project is licensed under the [Mozilla Public License 2.0](LICENSE.md) - se
 
 ## Acknowledgments
 
-Developed by [Forecast](https://forecast.bio/research).
+Developed by the Open Science team [Forecast](https://forecast.bio/research/).
+
+Support for the production of OpenAstrocytes at Forecast was generously provided by the Special Initiatives division of the [Astera Institute](https://astera.org/).
