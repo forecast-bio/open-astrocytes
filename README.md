@@ -273,4 +273,6 @@ This project is licensed under the [Mozilla Public License 2.0](LICENSE.md) - se
 
 Developed by the Open Science team [Forecast](https://forecast.bio/research/).
 
+Docs and README largely by Claude. If they hallucinated, let us know in the [Issues](./issues/)!
+
 Support for the production of OpenAstrocytes at Forecast was generously provided by the Special Initiatives division of the [Astera Institute](https://astera.org/).
