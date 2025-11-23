@@ -1,4 +1,10 @@
-"""TODO"""
+"""Common base classes and utilities for dataset management.
+
+This module provides the foundational abstractions used across all dataset types:
+    - DatasetInfo: Metadata and access for individual datasets
+    - GenericDatasetIndex: Index for generic Frame datasets
+    - ExperimentFrame: Abstract base class for typed experiment frames
+"""
 
 ##
 # Imports
@@ -29,7 +35,16 @@ ST = TypeVar( 'ST', bound = atdata.PackableSample )
 
 @dataclass
 class DatasetInfo( Generic[ST] ):
-    """TODO"""
+    """Metadata and access information for a single dataset.
+
+    Encapsulates dataset identification, location, and provides convenient access
+    to the underlying atdata.Dataset instance. The generic type parameter ST
+    specifies the sample type contained in the dataset.
+
+    Attributes:
+        name: Human-readable identifier for the dataset (e.g., 'generic/bath_application')
+        url: Full WebDataset URL pointing to the TAR archive(s)
+    """
     ##
     name: str
     """The OpenAstrocytes dataset identifier"""
@@ -54,7 +69,11 @@ class DatasetInfo( Generic[ST] ):
     
     @property
     def dataset( self ) -> atdata.Dataset[ST]:
-        """TODO"""
+        """Create and return an atdata.Dataset instance for this dataset.
+
+        Returns:
+            A type-parameterized Dataset instance configured to load from this dataset's URL.
+        """
         return atdata.Dataset[self.sample_type]( self.url )
 
     @classmethod
@@ -66,6 +85,17 @@ class DatasetInfo( Generic[ST] ):
                 sample_type: Type[ST],
                 hive_root: str = '',
             ) -> 'DatasetInfo[ST] | None':
+        """Parse dataset configuration into a DatasetInfo instance.
+
+        Args:
+            config: Configuration dictionary containing dataset metadata (must have 'path' key)
+            name: Dataset identifier (e.g., 'generic/bath_application')
+            sample_type: The type of samples in this dataset
+            hive_root: Base URL for the data repository
+
+        Returns:
+            A DatasetInfo instance if parsing succeeds, None otherwise.
+        """
         
         # TODO This is kind of a kludge
         # sample_type = typing.get_args( cls.__orig_bases__[0] )[0]
@@ -88,13 +118,27 @@ class DatasetInfo( Generic[ST] ):
         return ret
 
 class GenericDatasetIndex:
-    """TODO"""
+    """Index of available generic (untyped) Frame datasets.
+
+    Provides access to raw imaging datasets as generic toile.Frame objects,
+    before any experiment-specific type conversion. Each attribute (bath_application,
+    uncaging, etc.) is either a DatasetInfo[Frame] or None if that dataset is unavailable.
+
+    Attributes:
+        bath_application: Generic frames from bath application experiments
+        uncaging: Generic frames from photochemical uncaging experiments
+    """
     ##
     def __init__( self,
                 config: dict[str, Any],
                 hive_root: str = '',
             ):
-        """TODO"""
+        """Initialize the generic dataset index.
+
+        Args:
+            config: Configuration dictionary mapping experiment types to dataset configs
+            hive_root: Base URL for the data repository
+        """
 
         print( 'hello!' )
 
@@ -117,12 +161,25 @@ class GenericDatasetIndex:
 ## ABCs
 
 class ExperimentFrame( ABC ):
-    """Base for conversion from generic `toile` dataset Frame"""
+    """Abstract base class for experiment-specific frame types.
+
+    Defines the interface for converting generic toile.Frame objects into
+    typed experiment frames (BathApplicationFrame, UncagingFrame, etc.).
+    Subclasses must implement the from_generic() method to extract experiment-specific
+    metadata and structure the data appropriately.
+    """
 
     @staticmethod
     @abstractmethod
     def from_generic( s: Frame ) -> 'ExperimentFrame':
-        """Convert a generic Frame to this specific kind of Frame"""
+        """Convert a generic Frame to this specific experiment frame type.
+
+        Args:
+            s: A generic toile.Frame containing raw imaging data and metadata
+
+        Returns:
+            A typed experiment frame (subclass of ExperimentFrame) with extracted metadata
+        """
         pass
 
 

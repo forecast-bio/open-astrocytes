@@ -95,6 +95,17 @@ _SAMPLE_EXTRACT_KEYS = [
 ]
 
 def _extract_metadata( x: EmbeddingResult ) -> dict:
+    """Extract relevant metadata fields from an EmbeddingResult.
+
+    Filters metadata to retain only experiment-relevant fields, reducing
+    storage overhead in PCA result objects.
+
+    Args:
+        x: An EmbeddingResult with metadata to extract
+
+    Returns:
+        A dictionary with selected global and frame-specific metadata fields
+    """
     assert x.metadata is not None
     return dict(
         **{
@@ -117,10 +128,17 @@ IPCA_OUTPUT_DIR = (
     Path( output_data_path )
     / 'models' / 'ipca'
 ).as_posix()
-"""Directory within the Modal output drive where IPCA models are stored"""
+"""Directory within the Modal output drive where IPCA models are stored.
+
+All trained IPCA models are saved to this location in the persistent Modal volume.
+"""
 
 IPCA_FILENAME_TEMPLATE = 'ipca-{model_id}.npz'
-"""Filename template for IPCA model outputs"""
+"""Filename template for IPCA model outputs.
+
+Models are saved as compressed numpy archives with the model_id (with hyphens
+replaced by underscores) embedded in the filename.
+"""
 
 @app.function(
     timeout = TIMEOUT,
@@ -145,7 +163,47 @@ def ipca( wds_url: str, output_stem: str,
             #
             verbose: bool = False,
         ) -> str:
-    """TODO"""
+    """Train an Incremental PCA model on patch embeddings.
+
+    Streams embedding data from a WebDataset TAR, flattens patch embeddings from
+    2D grids into vectors, and performs incremental PCA training in batches.
+    Supports resuming training from a previously-saved model checkpoint.
+
+    The function processes embeddings in streaming fashion, making it suitable
+    for datasets too large to fit in memory. Each batch of patches is fed to
+    scikit-learn's IncrementalPCA, which updates the model incrementally.
+
+    Args:
+        wds_url: Source WebDataset URL containing EmbeddingResult samples
+        output_stem: Base name for output (currently unused, may be for future metadata)
+        model_id: Optional model ID to resume training. If None, starts a new model
+            with a randomly-generated UUID.
+        n_components: Number of principal components to compute
+        batch_size: Number of patch embeddings to accumulate before each PCA update.
+            Default of 20,480 patches balances memory usage and convergence.
+        n_batches: Maximum number of batches to process (None = process entire dataset)
+        verbose: If True, print progress messages during training
+
+    Returns:
+        The model_id (UUID string) identifying the saved model. Use this ID to
+        resume training or load the model for projections.
+
+    Example:
+        >>> # Train a new model
+        >>> model_id = ipca.remote(
+        ...     'https://data.example.com/embeddings.tar',
+        ...     'my-pca',
+        ...     n_components=64,
+        ...     n_batches=100
+        ... )
+        >>> # Resume training on the same model
+        >>> model_id = ipca.remote(
+        ...     'https://data.example.com/more-embeddings.tar',
+        ...     'my-pca',
+        ...     model_id=model_id,
+        ...     n_batches=50
+        ... )
+    """
 
     from uuid import uuid4
     from time import sleep

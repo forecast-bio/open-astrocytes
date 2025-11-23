@@ -133,7 +133,11 @@ EmbeddableSampleType: TypeAlias = Literal[
 
 @dataclass
 class EmbeddingResult( atdata.PackableSample ):
-    """TODO"""
+    """Vision transformer embedding outputs (local copy for Modal runtime).
+
+    This is a duplicate of the schema definition needed for the Modal runtime environment.
+    See astrocytes.schema.EmbeddingResult for the canonical definition.
+    """
     cls_embedding: NDArray
     registers: NDArray | None = None
     patches: NDArray | None = None
@@ -152,7 +156,22 @@ class EmbeddingResult( atdata.PackableSample ):
     max_inputs = MAX_INPUTS_PER_CONTAINER,
 )
 class ImageEmbedder:
-    """TODO"""
+    """Modal serverless class for computing vision transformer embeddings.
+
+    Runs DINOv3 vision transformer on A100 GPUs to extract CLS tokens, register tokens,
+    and per-patch embeddings from imaging datasets. Designed for batch processing with
+    automatic scaling and GPU snapshot support for fast cold starts.
+
+    The class maintains a persistent model in GPU memory and processes batches
+    of images through the transformer, returning structured EmbeddingResult objects.
+
+    Configuration:
+        - GPU: A100 (for large model capacity)
+        - Max containers: 5 concurrent instances
+        - Max inputs per container: 1 (to manage VRAM)
+        - Scaledown window: 3 minutes
+        - Timeout: 10 minutes per invocation
+    """
     ##
 
     import atdata
@@ -166,6 +185,12 @@ class ImageEmbedder:
         snap = True,
     )
     def _container_start( self ):
+        """Container initialization: load and compile the vision transformer model.
+
+        Runs once per container start. Loads the DINOv3 model from HuggingFace,
+        caches model hyperparameters, and compiles the model with torch.compile()
+        for optimized inference. Supports GPU snapshots for fast restarts.
+        """
 
         from transformers import (
             AutoImageProcessor,
@@ -203,6 +228,23 @@ class ImageEmbedder:
             batch_size: int | None = 32,
             num_workers: int = 4,
         ):
+        """Create a WebDataset dataloader for streaming image preprocessing.
+
+        Builds a pipeline that:
+            1. Loads samples from a WebDataset TAR archive
+            2. Extracts and preprocesses images (grayscale → RGB, scaling to uint8)
+            3. Applies the DINOv3 image processor
+            4. Batches samples for efficient GPU processing
+
+        Args:
+            url: WebDataset URL (can include shard patterns like 'data-{000..099}.tar')
+            sample_type: Type of samples in the dataset (Frame or BathApplicationFrame)
+            batch_size: Number of samples per batch
+            num_workers: Number of parallel workers for data loading
+
+        Returns:
+            A webdataset pipeline configured for batched image preprocessing
+        """
 
         import numpy as np
         import torch
@@ -329,7 +371,33 @@ class ImageEmbedder:
             sharded: bool = False,
             verbose: bool = False,
         ) -> str:
-        """TODO"""
+        """Process a dataset of images through the vision transformer.
+
+        Loads images from a WebDataset TAR, runs them through DINOv3, and saves
+        the resulting embeddings (CLS token, register tokens, patch embeddings)
+        as a new WebDataset TAR file in Modal storage.
+
+        Args:
+            wds_url: Source WebDataset URL containing images to embed
+            output_stem: Base name for output files (e.g., 'bath-app-embeddings')
+            batch_size: Number of images to process per batch
+            n_batches: Maximum number of batches to process (None = all)
+            kind: Type of samples in the source dataset ('Frame' or 'BathApplicationFrame')
+            sharded: If True, output multiple TAR shards instead of a single file
+            verbose: If True, print progress messages during processing
+
+        Returns:
+            Path to the output file(s) in Modal storage. For sharded output,
+            includes '{shard_id}' placeholder in the path.
+
+        Example:
+            >>> embedder = ImageEmbedder()
+            >>> output = embedder.process.remote(
+            ...     'https://data.example.com/images.tar',
+            ...     'my-embeddings',
+            ...     batch_size=32
+            ... )
+        """
 
         import torch
 
