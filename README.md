@@ -2,7 +2,7 @@
 
 **Open data and models for astrocyte dynamics**
 
-A Python library for discovering, loading, and processing experimental imaging datasets from astrocyte neuroscience research. Built on a cloud-hosted data repository with serverless compute backends for large-scale image analysis.
+A Python library for discovering, loading, and processing experimental imaging datasets from astrocyte neuroscience research. Built on a cloud-hosted data repository.
 
 [![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue.svg)](https://www.python.org/downloads/)
 
@@ -11,8 +11,6 @@ A Python library for discovering, loading, and processing experimental imaging d
 - **Unified Data Discovery**: Access experimental datasets through a single `Hive` interface backed by cloud-hosted manifests
 - **Type-Safe Schemas**: Strongly-typed dataclasses for different experiment types (bath application, photochemical uncaging)
 - **Lens Transformations**: Composable data pipelines for converting raw frames to typed experiments
-- **Vision Transformer Embeddings**: GPU-accelerated DINOv3 embeddings via Modal serverless infrastructure
-- **Incremental PCA**: Memory-efficient dimensionality reduction for large-scale patch embeddings
 - **WebDataset Format**: Streaming-friendly TAR archives for efficient cloud storage and access
 
 ## Installation
@@ -46,9 +44,9 @@ for frame in dataset.ordered(batch_size=None):
 
 ## Architecture
 
-### Three-Tier Data Abstraction
+### Three-Tier Data Organization
 
-The library uses a layered approach to organize imaging data:
+The library organizes imaging data in three tiers:
 
 ```
 ┌─────────────────────────────────────────────────┐
@@ -61,9 +59,9 @@ The library uses a layered approach to organize imaging data:
 │  BathApplicationFrame, UncagingFrame, etc.     │
 │  Domain-specific metadata extracted            │
 └─────────────────┬───────────────────────────────┘
-                  │ Backend Processing
+                  │
 ┌─────────────────▼───────────────────────────────┐
-│  Tier 3: Derived Results                       │
+│  Tier 3: Derived Results (Pre-computed)        │
 │  EmbeddingResult, EmbeddingPCResult            │
 │  Vision transformer outputs, PCA projections   │
 └─────────────────────────────────────────────────┘
@@ -78,8 +76,8 @@ hive = astrocytes.Hive()  # Fetches default manifest from data.forecastbio.cloud
 
 # Navigate the hierarchy
 generic_frames = hive.index.generic.bath_application.dataset
-embeddings = hive.index.embeddings.bath_application.dataset
-pca_reduced = hive.index.patch_pcs.bath_application.dataset
+embeddings = hive.index.embeddings.bath_application.dataset  # Pre-computed embeddings
+pca_reduced = hive.index.patch_pcs.bath_application.dataset  # Pre-computed PCA projections
 ```
 
 ## Usage Examples
@@ -96,7 +94,7 @@ from astrocytes.schema import BathApplicationFrame
 generic_dataset = astrocytes.data.bath_application
 
 # Apply lens transformation to get typed frames
-typed_dataset = generic_dataset.map(BathApplicationFrame.from_generic)
+typed_dataset = generic_dataset.as_type(BathApplicationFrame.from_generic)
 
 # Now iterate with full type information
 for frame in typed_dataset.ordered(batch_size=None):
@@ -107,83 +105,22 @@ for frame in typed_dataset.ordered(batch_size=None):
     print(f"Pixel scale: {frame.scale_x}μm × {frame.scale_y}μm")
 ```
 
-### Computing Embeddings (Modal Backend)
+### Working with Pre-computed Embeddings
 
-Process images through the DINOv3 vision transformer:
-
-```python
-from astrocytes.backend import embed
-
-# Initialize the Modal app
-app = embed.app
-
-# Process a dataset
-with app.run():
-    embedder = embed.ImageEmbedder()
-    output_path = embedder.process.remote(
-        wds_url='https://data.example.com/bath-app.tar',
-        output_stem='bath-app-embeddings',
-        batch_size=32,
-        kind='Frame',
-        verbose=True
-    )
-    print(f"Embeddings saved to: {output_path}")
-```
-
-### Training Incremental PCA
-
-Reduce embedding dimensionality with streaming PCA:
+The data repository includes pre-computed vision transformer embeddings and PCA projections. You can access these directly or apply custom transformations:
 
 ```python
-from astrocytes.backend import pca
-
-# Initialize the Modal app
-app = pca.app
-
-# Train a new PCA model
-with app.run():
-    model_id = pca.ipca.remote(
-        wds_url='https://data.example.com/embeddings.tar',
-        output_stem='pca-model',
-        n_components=64,
-        batch_size=20_480,
-        n_batches=100,  # Process 100 batches
-        verbose=True
-    )
-    print(f"Model ID: {model_id}")
-
-    # Resume training on the same model
-    model_id = pca.ipca.remote(
-        wds_url='https://data.example.com/more-embeddings.tar',
-        output_stem='pca-model',
-        model_id=model_id,  # Continue training
-        n_batches=50,
-        verbose=True
-    )
-```
-
-### Projecting Embeddings to PCA Space
-
-Apply a trained PCA model to new embeddings:
-
-```python
-import numpy as np
 from astrocytes import data
-from astrocytes.schema import patch_pc_projector
 
-# Load trained PCA model (from Modal volume or local file)
-pca_model = np.load('ipca-model.npz', allow_pickle=True)['ipca'].item()
-components = pca_model.components_
-
-# Create projection lens
-projector = patch_pc_projector(components)
-
-# Apply to embedding dataset
+# Access pre-computed embeddings
 embeddings = data.bath_application_embeddings
-reduced = embeddings.map(projector)
+for result in embeddings.ordered(batch_size=None):
+    print(f"CLS embedding shape: {result.cls_embedding.shape}")
+    print(f"Patch embeddings shape: {result.patches.shape}")  # (h, w, embedding_dim)
 
-# Iterate through reduced embeddings
-for result in reduced.ordered(batch_size=None):
+# Access pre-computed PCA projections
+pca_results = data.bath_application_patch_pcs
+for result in pca_results.ordered(batch_size=None):
     print(f"Patch PCs shape: {result.patch_pcs.shape}")  # (h, w, n_components)
 ```
 
@@ -238,8 +175,6 @@ astrocytes.data.bath_application_patch_pcs    # EmbeddingPCResult
 
 ## Development Setup
 
-### Local Development
-
 ```bash
 # Clone the repository
 git clone https://github.com/your-org/open-astrocytes.git
@@ -255,37 +190,6 @@ uv run pytest
 uv run pytest --cov=astrocytes --cov-report=html
 ```
 
-### Working with Modal Backends
-
-The embedding and PCA backends run on [Modal](https://modal.com) serverless infrastructure:
-
-```bash
-# Install Modal CLI
-pip install modal
-
-# Authenticate with Modal
-modal token new
-
-# Set your Modal environment
-modal config set-environment <your-environment>
-
-# Deploy the embedding backend
-uv run modal deploy src/astrocytes/backend/embed.py
-
-# Deploy the PCA backend
-uv run modal deploy src/astrocytes/backend/pca.py
-```
-
-### Testing Modal Functions Locally
-
-```bash
-# Run embedding backend locally (uses Modal local mode)
-uv run modal run src/astrocytes/backend/embed.py
-
-# Run PCA backend locally
-uv run modal run src/astrocytes/backend/pca.py
-```
-
 ## Project Structure
 
 ```
@@ -293,16 +197,13 @@ open-astrocytes/
 ├── src/astrocytes/
 │   ├── __init__.py              # Main package entry point
 │   ├── schema.py                # Public schema API
-│   ├── _datasets/               # Dataset management
-│   │   ├── __init__.py          # Hive and DatasetIndex
-│   │   ├── _common.py           # Base classes
-│   │   ├── _bath_application.py # Bath application schema
-│   │   ├── _uncaging.py         # Uncaging schema
-│   │   ├── _embeddings.py       # Embedding schemas
-│   │   └── _future.py           # Future expansions
-│   └── backend/                 # Modal compute backends
-│       ├── embed.py             # DINOv3 vision transformer
-│       └── pca.py               # Incremental PCA
+│   └── _datasets/               # Dataset management
+│       ├── __init__.py          # Hive and DatasetIndex
+│       ├── _common.py           # Base classes
+│       ├── _bath_application.py # Bath application schema
+│       ├── _uncaging.py         # Uncaging schema
+│       ├── _embeddings.py       # Embedding schemas
+│       └── _future.py           # Future expansions
 ├── tests/                       # Test suite
 ├── pyproject.toml               # Project metadata
 └── README.md                    # This file
@@ -312,10 +213,9 @@ open-astrocytes/
 
 - **[atdata](https://github.com/forecast-bio/atdata)**: Core dataset abstraction and lens transformations
 - **[toile](https://github.com/forecast-bio/toile)**: Generic imaging frame schema
-- **[Modal](https://modal.com)**: Serverless compute platform for GPU workloads
-- **[transformers](https://huggingface.co/docs/transformers)**: HuggingFace library for default transformer embedding models used here
-- **scikit-learn**: Implementation of a few standard data science techniques used here
-- **webdataset**: Streaming TAR dataset format
+- **matplotlib**: Plotting and visualization
+- **scikit-image**: Image processing utilities
+- **scipy**: Scientific computing tools
 
 ## Data Repository
 
