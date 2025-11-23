@@ -358,7 +358,7 @@ If you use this library in your research, please cite:
 
 ## License
 
-[To be determined]
+This project is licensed under the [Mozilla Public License 2.0](LICENSE.md) - see the [LICENSE.md](LICENSE.md) file for details.
 
 ## Acknowledgments
 
