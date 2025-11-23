@@ -1,4 +1,8 @@
-"""TODO"""
+"""Schema and dataset definitions for OpenAstrocytes photochemical uncaging data.
+
+This module defines the typed frame structure for photochemical uncaging experiments,
+where neurotransmitters (GABA, glutamate) are released via laser photolysis.
+"""
 
 ##
 # Imports
@@ -50,7 +54,12 @@ _COMPOUND_ALIASES: dict[UncagingCompound, list[str]] = {
 
 @dataclass
 class UncagingFrame( atdata.PackableSample, ExperimentFrame ):
-    """TODO"""
+    """Individual imaging frame captured during a photochemical uncaging experiment.
+
+    Represents a single frame from a time-series recording where caged neurotransmitters
+    (GABA, glutamate) are released via focused laser photolysis. Includes timing information,
+    experimental metadata, and spatial calibration data.
+    """
     ##
 
     uncaged_compound: UncagingCompound
@@ -101,7 +110,17 @@ class UncagingFrame( atdata.PackableSample, ExperimentFrame ):
 ## Register lenses
 
 def _extract_compound_from_filename( fn: str ) -> UncagingCompound:
-    """(Note: case-insensitive matching)"""
+    """Extract the uncaged compound type from a filename.
+
+    Performs case-insensitive matching against known compound aliases to identify
+    which neurotransmitter (GABA, glutamate) or control condition (laser_only) was used.
+
+    Args:
+        fn: Filename or path to parse
+
+    Returns:
+        The standardized compound name, or 'unknown' if no match found
+    """
     for candidate, aliases in _COMPOUND_ALIASES.items():
         for alias in aliases:
             if alias.lower() in fn.lower():
@@ -109,13 +128,36 @@ def _extract_compound_from_filename( fn: str ) -> UncagingCompound:
     return 'unknown'
 
 def _extract_is_test_from_filename( fn: str ) -> bool:
-    """TODO Based on a priori knowledge about file structure"""
+    """Determine if a recording is a test based on filename conventions.
+
+    Uses domain-specific knowledge of file naming patterns to identify test recordings.
+
+    Args:
+        fn: Filename or path to parse
+
+    Returns:
+        True if the file appears to be from a test recording, False otherwise
+    """
     if 'TEST' in fn:
         return True
     return False
 
 @atdata.lens
 def _specify_uncaging( s: Frame ) -> UncagingFrame:
+    """Convert a generic Frame to a typed UncagingFrame.
+
+    Extracts experiment-specific metadata (uncaged compound, timing, spatial scales, etc.)
+    from the generic Frame's metadata dictionary and source filename.
+
+    Args:
+        s: A generic toile.Frame with raw imaging data and metadata
+
+    Returns:
+        A fully-typed UncagingFrame with extracted experimental metadata
+
+    Raises:
+        AssertionError: If required metadata fields are missing from the source frame
+    """
 
     # TODO More elegant validation?
     assert s.metadata is not None, 'Source frame has no metadata'
