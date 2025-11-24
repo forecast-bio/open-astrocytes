@@ -1,7 +1,7 @@
 [project]
 name = "astrocytes"
 version = "0.1.1b1"
-description = "TODO"
+description = "Open data and models for astrocyte dynamics"
 readme = "README.md"
 authors = [
     { name = "Maxine Levesque", email = "170461181+maxinelevesque@users.noreply.github.com" }
