@@ -1,6 +1,6 @@
 [project]
 name = "astrocytes"
-version = "0.1.1b2"
+version = "0.1.1b3"
 description = "Open data and models for astrocyte dynamics"
 readme = "README.md"
 authors = [

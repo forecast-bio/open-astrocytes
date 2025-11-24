@@ -140,8 +140,6 @@ class GenericDatasetIndex:
             hive_root: Base URL for the data repository
         """
 
-        print( 'hello!' )
-
         # Shortcut
         def _generic_info( name: str ) -> DatasetInfo[Frame] | None:
             ret = DatasetInfo._parse(
