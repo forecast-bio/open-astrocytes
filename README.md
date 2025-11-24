@@ -271,7 +271,7 @@ This project is licensed under the [Mozilla Public License 2.0](LICENSE.md) - se
 
 ## Acknowledgments
 
-Developed by the Open Science team [Forecast](https://forecast.bio/research/).
+Developed by the Open Science team at [Forecast](https://forecast.bio/research/).
 
 Docs and README largely by Claude. If they hallucinated, let us know in the [Issues](https://github.com/forecast-bio/open-astrocytes/issues/)!
 
